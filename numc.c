@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 	if (argc < 3) printf("Usage: numc [decimal number] [target number system] [-v]\n");
 	else
 	{
-		if (strtol(argv[1], NULL, 10) > pow(10,9)-1 || strtol(argv[1], NULL, 10) < 0) printf("\nOnly positive numbers of up to 9 digits are supported currently.");
+		if (strtol(argv[1], NULL, 10) > pow(10,18)-1 || strtol(argv[1], NULL, 10) < 0) printf("\nOnly positive numbers of up to 18 digits are supported currently.");
 		else
 		{
 			if (strtol(argv[2], NULL, 10) < 2 || strtol(argv[2], NULL, 10) > 36) printf("\nOnly number systems on base 2 - 36 are supported currently.");
