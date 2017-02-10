@@ -14,13 +14,13 @@ int main(int argc, char *argv[])
 	unsigned long long int divergebnis = 1;
 	
 	// Kontrollmechanismen von hier bis Hauptprogramm
-	if (argc < 3) printf("Syntax: Binaer Dezimalzahl Zahlensystem [-v]\n");
+	if (argc < 3) printf("Usage: numc [decimal number] [target number system] [-v]\n");
 	else
 	{
-		if (strtol(argv[1], NULL, 10) > pow(10,9)-1 || strtol(argv[1], NULL, 10) < 0) printf("\nMomentan werden keine Zahlen mit mehr als 9 Stellen, oder kleiner als 0 unterstuetzt.");
+		if (strtol(argv[1], NULL, 10) > pow(10,9)-1 || strtol(argv[1], NULL, 10) < 0) printf("\nOnly positive numbers of up to 9 digits are supported currently.");
 		else
 		{
-			if (strtol(argv[2], NULL, 10) < 2 || strtol(argv[2], NULL, 10) > 36) printf("\nMomentan werden nur Zahlensysteme von 2 bis 36 unterstuetzt.");
+			if (strtol(argv[2], NULL, 10) < 2 || strtol(argv[2], NULL, 10) > 36) printf("\nOnly number systems on base 2 - 36 are supported currently.");
 			else
 			{
 				// Hauptprogramm
@@ -38,13 +38,13 @@ int main(int argc, char *argv[])
 					else if (divergebnis % strtol(argv[2], NULL, 10) > 9 ) endzahl[i] = divergebnis % strtol(argv[2], NULL, 10) + 55; //ASCII Werte fuer rest>9 (Buchstaben)
 					if (argc > 3) for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v"))
 					{
-						printf("\ni: %i ----------- Rechnung:\t%llu",i,divergebnis % strtol(argv[2], NULL, 10));
-						printf("\tRest:\t%c\tDivErgebnis:\t%llu",endzahl[i], divergebnis);
+						printf("\ni: %i ----------- calculation:\t%llu",i,divergebnis % strtol(argv[2], NULL, 10));
+						printf("\tremainder:\t%c\tquotient:\t%llu",endzahl[i], divergebnis);
 					}
 				}
 				if (argc > 3) for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v")) printf("\n");
 				// Ausgabe
-				printf("\n%s ist im %s-ersystem: ",argv[1],argv[2]);
+				printf("\n%s on base %s is: ",argv[1],argv[2]);
 				do
 				{
 					i = i -1;
@@ -54,6 +54,6 @@ int main(int argc, char *argv[])
 		}
 	}
 	// Programmende
-	printf("\n");
+	printf("\n\n");
 	return 0;
 }
