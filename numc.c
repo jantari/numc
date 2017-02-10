@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
 					i = i -1;
 					printf("%c", endzahl[i]);
 				} while (i >= 0);
-       		}
+       			}
 		}
 	}
 	// Programmende
