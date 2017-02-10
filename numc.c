@@ -1,4 +1,3 @@
-// 07.02.2017 DDMMYYYY
 // https://github.com/jantari
 
 #include<stdio.h>
