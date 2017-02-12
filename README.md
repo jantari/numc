@@ -10,5 +10,9 @@ The optional "-v" argument enables verbose mode and outputs additional informati
 
 Examples:
 
-numc 42 2		- Converts 42 (decimal) to binary
-numc 101010 2 10	- Converts 101010 (binary) to decimal
+    numc 42 2    
+Converts 42 (decimal) to binary    
+
+    numc 101010 2 10    
+Converts 101010 (binary) to decimal
+
