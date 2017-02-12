@@ -20,7 +20,6 @@ int main(int argc, char *argv[])
 	{
 		if (strcmp(argv[3], "-v") && strtol(argv[3], NULL, 10) < 2 || strtol(argv[3], NULL, 10) > 36) printf("\nOnly number systems on base 2 - 36 are supported currently.");
 	}
-	// printf("\nHauptprogrammroutine startet!\n");
 	// Hauptprogramm
 	for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v"))
 	{
@@ -30,14 +29,15 @@ int main(int argc, char *argv[])
 	for (args = argc -1; args > 2; args--) if (!strcmp(argv[args], "-v")) printf("\n");
 	if (argc > 3 && strcmp(argv[3], "-v"))
 	{
-		// Berechnung andere Zahlensysteme zu Dezimal
-		for (int position = strlen(argv[1]); position >= 0; position--)
+		// Berechnung andere Zahlensysteme zu Dezimal (Routine 1)
+		for (int position = 0; position != strlen(argv[1]); position++)
 		{
 			if (argv[1][position] != 0) divergebnis = argv[1][position] - 48;
-			endzahl2 = endzahl2 + divergebnis * pow(strtol(argv[2], NULL, 10),position - 1);
+			endzahl2 = endzahl2 + divergebnis * pow(strtol(argv[2], NULL, 10),strlen(argv[1]) - position - 1);
+			
 			for (args =argc - 1; args > 2; args--) if(!strcmp(argv[args], "-v"))
 			{
-				printf("\n%s hoch %i: %i",argv[2],position-1,(int)pow(strtol(argv[2], NULL, 10),position - 1));
+				printf("\n%s hoch %lu: %i",argv[2],strlen(argv[1]) - position - 1,(int)pow(strtol(argv[2], NULL, 10),strlen(argv[1]) - position - 1));
 				printf("\nargv[1][POSITION]: %i",argv[1][position] - 48);
 				printf("\nposition, position -1: %i, %i",position, position -1);
 				printf("\nENDZAHL2: %llu\n",endzahl2);
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
 	}
 	else
 	{
-		// Berechnung Dezimal zu anderen Zahlensystemen	
+		// Berechnung Dezimal zu anderen Zahlensystemen	(Routine 2)
 		for (divergebnis = strtol(argv[1], NULL, 10); divergebnis != 0; divergebnis = divergebnis / strtol(argv[2], NULL, 10), i++)
 		{
 			// Wenn rest jemals > 90 = ungültig! (90 = Z in ASCII)
