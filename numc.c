@@ -98,7 +98,7 @@ int main(int argc, char *argv[])
 		{
 			
 			for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v") && args != 3)  printf("\n%s(%s) on base %s is: ",argv[1],argv[2],argv[3]);
-			if (!strcmp(argv[3], "-v")) printf("\n%s(%s) in decimal is: ",argv[1],argv[2]);
+			if (!strcmp(argv[3], "-v")) printf("\n\n%s(%s) in decimal is: ",argv[1],argv[2]);
                 }
                 do
                 {
