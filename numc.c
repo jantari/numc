@@ -20,19 +20,19 @@ int main(int argc, char *argv[])
 	}
 	if (strtol(argv[1], NULL, 10) > pow(10,18)-1 || strtol(argv[1], NULL, 10) < 0)
 	{
-		printf("\nOnly positive numbers of up to 18 digits are supported currently.\n");
+		printf("Only positive numbers of up to 18 digits are supported currently.\n");
 		return -1;
 	}
 	if (strtol(argv[2], NULL, 10) < 2 || strtol(argv[2], NULL, 10) > 36)
 	{
-		printf("\nOnly number systems on base 2 - 36 are supported currently.\n");
+		printf("Only number systems on base 2 - 36 are supported currently.\n");
 		return -1;
 	}
 	if (argc > 3 && strcmp(argv[3], "-v"))
 	{
 		if (strtol(argv[3], NULL, 10) < 2 || strtol(argv[3], NULL, 10) > 36)
 		{
-			printf("\nOnly number systems on base 2 - 36 are supported currently.\n");
+			printf("Only number systems on base 2 - 36 are supported currently.\n");
 			return -1;
 		}
 	}
@@ -55,15 +55,17 @@ int main(int argc, char *argv[])
 				endzahl2 = endzahl2 + divergebnis * pow(strtol(argv[2], NULL, 10),strlen(argv[1]) - position - 1);	
 			}
 			// Verbose Output
-			for (args =argc - 1; args > 2; args--) if(!strcmp(argv[args], "-v"))
+			for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v"))
 			{
-				printf("\n%s hoch %lu: %i",argv[2],strlen(argv[1]) - position - 1,(int)pow(strtol(argv[2], NULL, 10),strlen(argv[1]) - position - 1));
+				printf("\n%s times %lu: %i",argv[2],strlen(argv[1]) - position - 1,(int)pow(strtol(argv[2], NULL, 10),strlen(argv[1]) - position - 1));
 				printf("\nValue on position %i: %i",position,argv[1][position] - 48);
 				printf("\n>> Result so far: %llu\n",endzahl2);
 			}
 		}
-		// Ausgabe
-		if (!strcmp(argv[3], "10")) printf("\n%s(%s) in decimal is: %llu",argv[1],argv[2],endzahl2);
+		// Ausgabe 
+		if (argc > 3) for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v")) printf("\n%s(%s) in decimal is: ",argv[1],argv[2]);
+		if (!strcmp(argv[3], "10")) printf("%llu",endzahl2);
+		else if (argc > 3) for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v")) printf("%llu",endzahl2);
 	}
 	if (argc < 4 || argc > 3 && strcmp(argv[3], "10"))
 	{
@@ -91,17 +93,21 @@ int main(int argc, char *argv[])
 			if (argc > 3 && strcmp(argv[3], "-v")) divergebnis = divergebnis / strtol(argv[3], NULL, 10);
 			else divergebnis = divergebnis / strtol(argv[2], NULL, 10);
 		}
-		if (argc > 3) for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v")) printf("\n");
 		// Ausgabe
-		if (argc > 3 && strcmp(argv[3], "-v")) printf("\n%s(%s) on base %s is: ",argv[1],argv[2],argv[3]);
-		else printf("\n%s on base %s is: ",argv[1],argv[2]);
-		do
+		if (argc > 3)
 		{
-			i = i -1;
-			printf("%c", endzahl[i]);
-		} while (i >= 0);
+			
+			for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v") && args != 3)  printf("\n%s(%s) on base %s is: ",argv[1],argv[2],argv[3]);
+			if (!strcmp(argv[3], "-v")) printf("\n%s(%s) in decimal is: ",argv[1],argv[2]);
+                }
+                do
+                {
+                        i = i -1;
+                        printf("%c", endzahl[i]);
+                } while (i >= 0);
 	}
 	// Programmende
-	printf("\n\n");
+	if (argc > 3) for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v")) printf("\n");
+	printf("\n");
 	return 0;
 }
