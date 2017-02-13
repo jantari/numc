@@ -54,33 +54,47 @@ int main(int argc, char *argv[])
 				else if (argv[1][position] < 58) divergebnis = argv[1][position] - 48;
 				endzahl2 = endzahl2 + divergebnis * pow(strtol(argv[2], NULL, 10),strlen(argv[1]) - position - 1);	
 			}
+			// Verbose Output
 			for (args =argc - 1; args > 2; args--) if(!strcmp(argv[args], "-v"))
 			{
 				printf("\n%s hoch %lu: %i",argv[2],strlen(argv[1]) - position - 1,(int)pow(strtol(argv[2], NULL, 10),strlen(argv[1]) - position - 1));
 				printf("\nValue on position %i: %i",position,argv[1][position] - 48);
-				printf("\nENDZAHL2: %llu\n",endzahl2);
+				printf("\n>> Result so far: %llu\n",endzahl2);
 			}
 		}
 		// Ausgabe
-		printf("\n%s(%s) on base %s is: %llu",argv[1],argv[2],argv[3],endzahl2);
+		printf("\n%s(%s) in decimal is: %llu",argv[1],argv[2],endzahl2);
 	}
-	else
+	if (argc < 4 || argc > 3 && strcmp(argv[3], "10"))
 	{
 		// Berechnung Dezimal zu anderen Zahlensystemen	(Routine 2)
-		for (divergebnis = strtol(argv[1], NULL, 10); divergebnis != 0; divergebnis = divergebnis / strtol(argv[2], NULL, 10), i++)
+		if (argc > 3 && strcmp(argv[3], "-v")) divergebnis = endzahl2;
+		else divergebnis = strtol(argv[1], NULL, 10);
+
+		for (; divergebnis != 0; i++)
 		{
 			// Wenn rest jemals > 90 = ungültig! (90 = Z in ASCII)
-			if (divergebnis % strtol(argv[2], NULL, 10) < 10) endzahl[i] = divergebnis % strtol(argv[2], NULL, 10) + 48; //ASCII Werte fuer rest<9
-			else if (divergebnis % strtol(argv[2], NULL, 10) > 9 ) endzahl[i] = divergebnis % strtol(argv[2], NULL, 10) + 55; //ASCII Werte fuer rest>9 (Buchstaben)
+			if (argc > 3 && strcmp(argv[3], "-v"))
+			{
+				if (divergebnis % strtol(argv[3], NULL, 10) < 10) endzahl[i] = divergebnis % strtol(argv[3], NULL, 10) + 48; //ASCII Werte fuer rest<9
+				else if (divergebnis % strtol(argv[3], NULL, 10) > 9 ) endzahl[i] = divergebnis % strtol(argv[3], NULL, 10) + 55; //ASCII Werte fuer rest>9 (Buchstaben)
+			} else {
+				 if (divergebnis % strtol(argv[2], NULL, 10) < 10) endzahl[i] = divergebnis % strtol(argv[2], NULL, 10) + 48; //ASCII Werte fuer rest<9
+                                else if (divergebnis % strtol(argv[2], NULL, 10) > 9 ) endzahl[i] = divergebnis % strtol(argv[2], NULL, 10) + 55; //ASCII Werte fuer rest>9 (Buchstaben)
+			}
+			// Verbose Output
 			if (argc > 3) for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v"))
 			{
 				printf("\ni: %i ----------- calculation:\t%llu",i,divergebnis % strtol(argv[2], NULL, 10));
 				printf("\tremainder:\t%c\tquotient:\t%llu",endzahl[i], divergebnis);
 			}
+			if (argc > 3 && strcmp(argv[3], "-v")) divergebnis = divergebnis / strtol(argv[3], NULL, 10);
+			else divergebnis = divergebnis / strtol(argv[2], NULL, 10);
 		}
 		if (argc > 3) for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v")) printf("\n");
 		// Ausgabe
-		printf("\n%s on base %s is: ",argv[1],argv[2]);
+		if (argc > 3 && strcmp(argv[3], "-v")) printf("\n%s(%s) on base %s is: ",argv[1],argv[2],argv[3]);
+		else printf("\n%s on base %s is: ",argv[1],argv[2]);
 		do
 		{
 			i = i -1;
