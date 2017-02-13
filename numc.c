@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 	for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v"))
 	{
 		printf("\n*** VERBOSE MODE ***\n");
-		for (args = argc; args >= 0; args--) printf("\nargv[%i]: %s",args, argv[args]);
+		for (args = argc - 1; args >= 0; args--) printf("\nargv[%i]: %s",args, argv[args]);
 	}
 	for (args = argc -1; args > 2; args--) if (!strcmp(argv[args], "-v")) printf("\n");
 	if (argc > 3 && strcmp(argv[3], "-v"))
@@ -63,7 +63,7 @@ int main(int argc, char *argv[])
 			}
 		}
 		// Ausgabe
-		printf("\n%s(%s) in decimal is: %llu",argv[1],argv[2],endzahl2);
+		if (!strcmp(argv[3], "10")) printf("\n%s(%s) in decimal is: %llu",argv[1],argv[2],endzahl2);
 	}
 	if (argc < 4 || argc > 3 && strcmp(argv[3], "10"))
 	{
