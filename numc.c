@@ -53,10 +53,10 @@ int main(int argc, char *argv[])
 		}
 	}
 	// Hauptprogramm
-	for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v"))
+	// Verbose Output
+	for (args = 2; args < argc; args++) if (!strcmp(argv[args], "-v"))
 	{
-		printf("\n*** VERBOSE MODE ***\n");
-		for (args = argc - 1; args >= 0; args--) printf("\nargv[%i]: %s",args, argv[args]);
+		for (args = 0; args < argc; args++) printf("\nargv[%i]: %s",args, argv[args]);
 	}
 	for (args = argc -1; args > 2; args--) if (!strcmp(argv[args], "-v")) printf("\n");
 	if (argc > 3 && strcmp(argv[3], "-v"))
