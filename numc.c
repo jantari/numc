@@ -73,15 +73,15 @@ int main(int argc, char *argv[])
 			// Verbose Output
 			for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v"))
 			{
-				printf("\n%s times %lu: %i",argv[2],strlen(argv[1]) - position - 1,(int)pow(strtol(argv[2], NULL, 10),strlen(argv[1]) - position - 1));
-				printf("\nValue on position %i: %i",position,argv[1][position] - 48);
+				printf("\n%s ^ %lu: %i",argv[2],strlen(argv[1]) - position - 1,(int)pow(strtol(argv[2], NULL, 10),strlen(argv[1]) - position - 1));
+				printf("\nPosition: %i --- Value: %llu",position,divergebnis);
 				printf("\n>> Result so far: %llu\n",endzahl2);
 			}
 		}
 		// Ausgabe 
 		if (argc > 3) for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v")) printf("\n%s(%s) in decimal is: ",argv[1],argv[2]);
 		if (!strcmp(argv[3], "10")) printf("%llu",endzahl2);
-		else if (argc > 3) for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v")) printf("%llu",endzahl2);
+		else if (argc > 3) for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v")) printf("%llu\n",endzahl2);
 	}
 	if (argc < 4 || argc > 3 && strcmp(argv[3], "10"))
 	{
@@ -112,8 +112,7 @@ int main(int argc, char *argv[])
 		// Ausgabe
 		if (argc > 3)
 		{
-			
-			for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v") && args != 3)  printf("\n%s(%s) on base %s is: ",argv[1],argv[2],argv[3]);
+			for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v") && args != 3)  printf("\n\n%s(%s) on base %s is: ",argv[1],argv[2],argv[3]);
 			if (!strcmp(argv[3], "-v")) printf("\n\n%s(%s) in decimal is: ",argv[1],argv[2]);
                 }
                 do
