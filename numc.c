@@ -8,7 +8,7 @@
 int main(int argc, char *argv[])
 {
 	// Variablendeklaration
-	int i = 0, args = 0;
+	int i = 0, args = 0, position = 0;
 	char endzahl[60];
 	unsigned long long int divergebnis = 1, endzahl2 = 0;
 
@@ -35,6 +35,22 @@ int main(int argc, char *argv[])
 			printf("Only number systems on base 2 - 36 are supported currently.\n");
 			return -1;
 		}
+		for (position = 0; position != strlen(argv[1]); position++)
+		{
+			if (argv[1][position] > 57)
+			{
+				if (argv[1][position] - 55 >= strtol(argv[2], NULL, 10))
+				{
+					printf("%s is not a valid number in the number system specified.\n",argv[1]);
+					return -1;
+				}
+			}
+			else if (argv[1][position] - 48 >= strtol(argv[2], NULL, 10))
+			{
+				printf("%s is not a valid number in the number system specified.\n",argv[1]);
+				return -1;
+			}
+		}
 	}
 	// Hauptprogramm
 	for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v"))
@@ -46,7 +62,7 @@ int main(int argc, char *argv[])
 	if (argc > 3 && strcmp(argv[3], "-v"))
 	{
 		// Berechnung andere Zahlensysteme zu Dezimal (Routine 1)
-		for (int position = 0; position != strlen(argv[1]); position++)
+		for (position = 0; position != strlen(argv[1]); position++)
 		{
 			if (argv[1][position] != 48)
 			{
