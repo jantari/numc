@@ -28,6 +28,17 @@ int main(int argc, char *argv[])
 		printf("Only number systems on base 2 - 36 are supported currently.\n");
 		return -1;
 	}
+	if (argc == 3 || argc > 3 && !strcmp(argv[3], "-v"))
+	{
+		for (position = 0; position != strlen(argv[1]); position++)
+		{
+			if (argv[1][position] - 48 >= 10)
+			{
+				printf("%s is not a valid number in the decimal number system.\n",argv[1]);
+				return -1;
+			}
+		}
+	}
 	if (argc > 3 && strcmp(argv[3], "-v"))
 	{
 		if (strtol(argv[3], NULL, 10) < 2 || strtol(argv[3], NULL, 10) > 36)
