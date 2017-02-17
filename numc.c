@@ -10,6 +10,7 @@ int main(int argc, char *argv[])
 	// Variablendeklaration
 	int i = 0, args = 0, position = 0;
 	char endzahl[60];
+	_Bool verbosemode = 0;
 	unsigned long long int divergebnis = 1, endzahl2 = 0;
 
 	// Kontrollmechanismen von hier bis Hauptprogramm
@@ -28,6 +29,7 @@ int main(int argc, char *argv[])
 		printf("Only number systems on base 2 - 36 are supported currently.\n");
 		return -1;
 	}
+	// Check if input number is valid
 	if (argc == 3 || argc > 3 && !strcmp(argv[3], "-v"))
 	{
 		for (position = 0; position != strlen(argv[1]); position++)
@@ -46,6 +48,7 @@ int main(int argc, char *argv[])
 			printf("Only number systems on base 2 - 36 are supported currently.\n");
 			return -1;
 		}
+		// Check if input number is valid
 		for (position = 0; position != strlen(argv[1]); position++)
 		{
 			if (argv[1][position] > 57)
@@ -63,13 +66,14 @@ int main(int argc, char *argv[])
 			}
 		}
 	}
+	// Check for verbose mode
+	if (argc > 3) for (args = 2; args < argc; args++) if (!strcmp(argv[args], "-v")) verbosemode = 1;
 	// Hauptprogramm
-	// Verbose Output
-	for (args = 2; args < argc; args++) if (!strcmp(argv[args], "-v"))
+	if (verbosemode == 1)
 	{
 		for (args = 0; args < argc; args++) printf("\nargv[%i]: %s",args, argv[args]);
 	}
-	for (args = argc -1; args > 2; args--) if (!strcmp(argv[args], "-v")) printf("\n");
+	if (verbosemode == 1) printf("\n");
 	if (argc > 3 && strcmp(argv[3], "-v"))
 	{
 		// Berechnung andere Zahlensysteme zu Dezimal (Routine 1)
@@ -81,8 +85,7 @@ int main(int argc, char *argv[])
 				else if (argv[1][position] < 58) divergebnis = argv[1][position] - 48;
 				endzahl2 = endzahl2 + divergebnis * pow(strtol(argv[2], NULL, 10),strlen(argv[1]) - position - 1);	
 			}
-			// Verbose Output
-			for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v"))
+			if (verbosemode == 1)
 			{
 				printf("\n%s ^ %lu: %i",argv[2],strlen(argv[1]) - position - 1,(int)pow(strtol(argv[2], NULL, 10),strlen(argv[1]) - position - 1));
 				printf("\nPosition: %i --- Value: %llu",position,divergebnis);
@@ -90,9 +93,9 @@ int main(int argc, char *argv[])
 			}
 		}
 		// Ausgabe 
-		if (argc > 3) for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v")) printf("\n%s(%s) in decimal is: ",argv[1],argv[2]);
+		if (verbosemode == 1) printf("\n%s(%s) in decimal is: ",argv[1],argv[2]);
 		if (!strcmp(argv[3], "10")) printf("%llu",endzahl2);
-		else if (argc > 3) for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v")) printf("%llu\n",endzahl2);
+		else if (verbosemode == 1) printf("%llu\n",endzahl2);
 	}
 	if (argc < 4 || argc > 3 && strcmp(argv[3], "10"))
 	{
@@ -111,8 +114,7 @@ int main(int argc, char *argv[])
 				 if (divergebnis % strtol(argv[2], NULL, 10) < 10) endzahl[i] = divergebnis % strtol(argv[2], NULL, 10) + 48; //ASCII Werte fuer rest<9
                                 else if (divergebnis % strtol(argv[2], NULL, 10) > 9 ) endzahl[i] = divergebnis % strtol(argv[2], NULL, 10) + 55; //ASCII Werte fuer rest>9 (Buchstaben)
 			}
-			// Verbose Output
-			if (argc > 3) for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v"))
+			if (verbosemode == 1)
 			{
 				printf("\ni: %i ----------- calculation:\t%llu",i,divergebnis % strtol(argv[2], NULL, 10));
 				printf("\tremainder:\t%c\tquotient:\t%llu",endzahl[i], divergebnis);
