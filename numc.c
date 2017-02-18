@@ -74,7 +74,7 @@ int main(int argc, char *argv[])
 		for (args = 0; args < argc; args++) printf("\nargv[%i]: %s",args, argv[args]);
 	}
 	if (verbosemode == 1) printf("\n");
-	if (argc > 3 && strcmp(argv[3], "-v"))
+	if (argc > 3 && strcmp(argv[3], "-v") && strcmp(argv[2], "10"))
 	{
 		// Berechnung andere Zahlensysteme zu Dezimal (Routine 1)
 		for (position = 0; position != strlen(argv[1]); position++)
@@ -100,15 +100,14 @@ int main(int argc, char *argv[])
 	if (argc < 4 || argc > 3 && strcmp(argv[3], "10"))
 	{
 		// Berechnung Dezimal zu anderen Zahlensystemen	(Routine 2)
-		if (argc > 3 && strcmp(argv[3], "-v")) divergebnis = endzahl2;
+		if (argc > 3 && strcmp(argv[3], "-v") && strcmp(argv[2], "10")) divergebnis = endzahl2;
 		else divergebnis = strtol(argv[1], NULL, 10);
 
 		for (; divergebnis != 0; i++)
 		{
-			// Wenn rest jemals > 90 = ungültig! (90 = Z in ASCII)
 			if (argc > 3 && strcmp(argv[3], "-v"))
 			{
-				if (divergebnis % strtol(argv[3], NULL, 10) < 10) endzahl[i] = divergebnis % strtol(argv[3], NULL, 10) + 48; //ASCII Werte fuer rest<9
+				if (divergebnis % strtol(argv[3], NULL, 10) < 10) endzahl[i] = divergebnis % strtol(argv[3], NULL, 10) + 48; //ASCII Werte fuer rest<10
 				else if (divergebnis % strtol(argv[3], NULL, 10) > 9 ) endzahl[i] = divergebnis % strtol(argv[3], NULL, 10) + 55; //ASCII Werte fuer rest>9 (Buchstaben)
 			} else {
 				 if (divergebnis % strtol(argv[2], NULL, 10) < 10) endzahl[i] = divergebnis % strtol(argv[2], NULL, 10) + 48; //ASCII Werte fuer rest<9
@@ -123,19 +122,16 @@ int main(int argc, char *argv[])
 			else divergebnis = divergebnis / strtol(argv[2], NULL, 10);
 		}
 		// Ausgabe
-		if (argc > 3)
-		{
-			for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v") && args != 3)  printf("\n\n%s(%s) on base %s is: ",argv[1],argv[2],argv[3]);
-			if (!strcmp(argv[3], "-v")) printf("\n\n%s(%s) in decimal is: ",argv[1],argv[2]);
-                }
+		if (verbosemode == 1 && strcmp(argv[3], "-v")) printf("\n\n%s(%s) on base %s is: ",argv[1],argv[2],argv[3]);
+		else if (verbosemode == 1 && !strcmp(argv[3], "-v")) printf("\n\n%s(%s) in decimal is: ",argv[1],argv[2]);
                 do
                 {
                         i = i -1;
-                        printf("%c", endzahl[i]);
+			putchar(endzahl[i]);
                 } while (i >= 0);
 	}
 	// Programmende
-	if (argc > 3) for (args = argc - 1; args > 2; args--) if (!strcmp(argv[args], "-v")) printf("\n");
+	if (verbosemode == 1) printf("\n");
 	printf("\n");
 	return 0;
 }
