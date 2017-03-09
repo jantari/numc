@@ -83,7 +83,7 @@ int main(int argc, char *argv[])
 			{
 				if (argv[1][position] > 57) divergebnis = argv[1][position] - 55;
 				else if (argv[1][position] < 58) divergebnis = argv[1][position] - 48;
-				endzahl2 = endzahl2 + divergebnis * pow(strtol(argv[2], NULL, 10),strlen(argv[1]) - position - 1);	
+				endzahl2 += divergebnis * pow(strtol(argv[2], NULL, 10),strlen(argv[1]) - position - 1);	
 			}
 			if (verbosemode == 1)
 			{
