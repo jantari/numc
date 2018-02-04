@@ -4,134 +4,139 @@
 #include<math.h>
 #include<string.h>
 #include<stdlib.h>
+#include<unistd.h>
+
+unsigned long long int other_to_decimal (char input[], int source_num_sys, _Bool verbosemode);
+void decimal_to_other (unsigned long long int input, unsigned int target_num_sys, _Bool verbosemode);
+void print_help (void);
 
 int main(int argc, char *argv[])
 {
 	// Variablendeklaration
-	int i = 0, args = 0, position = 0;
+	int target_num_sys = 0, source_num_sys = 0;
 	char endzahl[60];
+	char input[60];
 	_Bool verbosemode = 0;
-	unsigned long long int divergebnis = 1, endzahl2 = 0;
+	unsigned long long int endzahl2 = 0;
 
-	// Kontrollmechanismen von hier bis Hauptprogramm
-	if (argc < 3)
-	{
-		printf("Usage: numc input-number [input number system] target-number-system [-v]\n");
-		return -1;
+	// Using getopt
+	int option = 0;
+    while ((option = getopt(argc, argv, "i:s:t:hv")) != -1)
+    {
+        switch (option)
+        {
+        case 'i':
+            if(!strcpy(input, optarg)) {
+                printf("Wrong command line argument: %s\n", optarg);
+                exit(-1);
+            }
+            break;
+        case 's':
+            if(!(source_num_sys = atoi(optarg))) {
+                printf("Wrong command line argument: %s\n", optarg);
+                exit(-1);
+            }
+            break;
+        case 't':
+            if(!(target_num_sys = atoi(optarg))) {
+                printf("Wrong command line argument: %s\n", optarg);
+                exit(-1);
+            }
+            break;
+        case 'h':
+            print_help();
+            exit(0);
+            break;
+        case 'v':
+            verbosemode = 1;
+            break;
+        default:
+            break;
+        }
 	}
-	if (strtol(argv[1], NULL, 10) > pow(10,18)-1 || strtol(argv[1], NULL, 10) < 0)
-	{
-		printf("Only positive numbers of up to 18 digits are supported currently.\n");
-		return -1;
-	}
-	if (strtol(argv[2], NULL, 10) < 2 || strtol(argv[2], NULL, 10) > 36)
-	{
-		printf("Only number systems on base 2 - 36 are supported currently.\n");
-		return -1;
-	}
-	// Check if input number is valid
-	if (argc == 3 || argc > 3 && !strcmp(argv[3], "-v"))
-	{
-		for (position = 0; position != strlen(argv[1]); position++)
-		{
-			if (argv[1][position] - 48 >= 10)
-			{
-				printf("%s is not a valid number in the decimal number system.\n",argv[1]);
-				return -1;
-			}
+
+	for (int iterate_through_string = 0; iterate_through_string != strlen(input); iterate_through_string++) {
+		if (input[iterate_through_string] > source_num_sys) {
+			printf("%s is not a valid number in the %i-number system.\n", input, source_num_sys);
+			exit(-1);
 		}
 	}
-	if (argc > 3 && strcmp(argv[3], "-v"))
-	{
-		if (strtol(argv[3], NULL, 10) < 2 || strtol(argv[3], NULL, 10) > 36)
-		{
-			printf("Only number systems on base 2 - 36 are supported currently.\n");
-			return -1;
-		}
-		// Check if input number is valid
-		for (position = 0; position != strlen(argv[1]); position++)
-		{
-			if (argv[1][position] > 57)
-			{
-				if (argv[1][position] - 55 >= strtol(argv[2], NULL, 10))
-				{
-					printf("%s is not a valid number in the number system specified.\n",argv[1]);
-					return -1;
-				}
-			}
-			else if (argv[1][position] - 48 >= strtol(argv[2], NULL, 10))
-			{
-				printf("%s is not a valid number in the number system specified.\n",argv[1]);
-				return -1;
-			}
-		}
-	}
-	// Check for verbose mode
-	if (argc > 3) for (args = 2; args < argc; args++) if (!strcmp(argv[args], "-v")) verbosemode = 1;
+
 	// Hauptprogramm
-	if (verbosemode == 1)
-	{
-		for (args = 0; args < argc; args++) printf("\nargv[%i]: %s",args, argv[args]);
-	}
-	if (verbosemode == 1) printf("\n");
-	if (argc > 3 && strcmp(argv[3], "-v") && strcmp(argv[2], "10"))
-	{
+	if (source_num_sys != 10) {
 		// Berechnung andere Zahlensysteme zu Dezimal (Routine 1)
-		for (position = 0; position != strlen(argv[1]); position++)
-		{
-			if (argv[1][position] != 48)
-			{
-				if (argv[1][position] > 57) divergebnis = argv[1][position] - 55;
-				else if (argv[1][position] < 58) divergebnis = argv[1][position] - 48;
-				endzahl2 += divergebnis * pow(strtol(argv[2], NULL, 10),strlen(argv[1]) - position - 1);	
-			}
-			if (verbosemode == 1)
-			{
-				printf("\n%s ^ %lu: %i",argv[2],strlen(argv[1]) - position - 1,(int)pow(strtol(argv[2], NULL, 10),strlen(argv[1]) - position - 1));
-				printf("\nPosition: %i --- Value: %llu",position,divergebnis);
-				printf("\n>> Result so far: %llu\n",endzahl2);
-			}
-		}
+		endzahl2 = other_to_decimal(input, source_num_sys, verbosemode);
 		// Ausgabe 
-		if (verbosemode == 1) printf("\n%s(%s) in decimal is: ",argv[1],argv[2]);
-		if (!strcmp(argv[3], "10")) printf("%llu",endzahl2);
+		if (verbosemode == 1) printf("\n%s(%d) in decimal is: ", input, source_num_sys);
+		if (target_num_sys == 10) printf("%llu",endzahl2);
 		else if (verbosemode == 1) printf("%llu\n",endzahl2);
 	}
-	if (argc < 4 || argc > 3 && strcmp(argv[3], "10"))
+	if (target_num_sys != 10)
 	{
 		// Berechnung Dezimal zu anderen Zahlensystemen	(Routine 2)
-		if (argc > 3 && strcmp(argv[3], "-v") && strcmp(argv[2], "10")) divergebnis = endzahl2;
-		else divergebnis = strtol(argv[1], NULL, 10);
-
-		for (; divergebnis != 0; i++)
-		{
-			if (argc > 3 && strcmp(argv[3], "-v"))
-			{
-				if (divergebnis % strtol(argv[3], NULL, 10) < 10) endzahl[i] = divergebnis % strtol(argv[3], NULL, 10) + 48; //ASCII Werte fuer rest<10
-				else if (divergebnis % strtol(argv[3], NULL, 10) > 9 ) endzahl[i] = divergebnis % strtol(argv[3], NULL, 10) + 55; //ASCII Werte fuer rest>9 (Buchstaben)
-			} else {
-				 if (divergebnis % strtol(argv[2], NULL, 10) < 10) endzahl[i] = divergebnis % strtol(argv[2], NULL, 10) + 48; //ASCII Werte fuer rest<9
-                                else if (divergebnis % strtol(argv[2], NULL, 10) > 9 ) endzahl[i] = divergebnis % strtol(argv[2], NULL, 10) + 55; //ASCII Werte fuer rest>9 (Buchstaben)
-			}
-			if (verbosemode == 1)
-			{
-				printf("\ni: %i ----------- calculation:\t%llu",i,divergebnis % strtol(argv[2], NULL, 10));
-				printf("\tremainder:\t%c\tquotient:\t%llu",endzahl[i], divergebnis);
-			}
-			if (argc > 3 && strcmp(argv[3], "-v")) divergebnis = divergebnis / strtol(argv[3], NULL, 10);
-			else divergebnis = divergebnis / strtol(argv[2], NULL, 10);
+		if (source_num_sys != 10) {
+			decimal_to_other(endzahl2, target_num_sys, verbosemode);
+		} else {
+			decimal_to_other(atol(input), target_num_sys, verbosemode);
 		}
-		// Ausgabe
-		if (verbosemode == 1 && strcmp(argv[3], "-v")) printf("\n\n%s(%s) on base %s is: ",argv[1],argv[2],argv[3]);
-		else if (verbosemode == 1 && !strcmp(argv[3], "-v")) printf("\n\n%s(%s) in decimal is: ",argv[1],argv[2]);
-                do
-                {
-                        i = i -1;
-			putchar(endzahl[i]);
-                } while (i >= 0);
 	}
 	// Programmende
-	if (verbosemode == 1) printf("\n");
-	printf("\n");
+	putchar('\n');
+	if (verbosemode == 1) putchar('\n');
 	return 0;
+}
+
+unsigned long long int other_to_decimal (char input[], int source_num_sys, _Bool verbosemode) {
+	unsigned long long int divergebnis = 1, endzahl2 = 0;
+
+	for (int position = 0; position != strlen(input); position++) {
+		if (input[position] != 48)
+		{
+			if (input[position] > 57) divergebnis = input[position] - 55;
+			else if (input[position] < 58) divergebnis = input[position] - 48;
+
+			endzahl2 += divergebnis * pow(source_num_sys, strlen(input) - position - 1);	
+		}
+		if (verbosemode == 1)
+		{
+			printf("\n%d ^ %lu: %i", source_num_sys, strlen(input) - position - 1, (int)pow(source_num_sys, strlen(input) - position - 1));
+			printf("\nPosition: %i --- Value: %c", position, input[position]);
+			printf("\n>> Result so far: %llu\n",endzahl2);
+		}
+	}
+
+	return endzahl2;
+}
+
+void decimal_to_other (unsigned long long int input, unsigned int target_num_sys, _Bool verbosemode) {
+	char output[60];
+    int i = 0;
+
+	for (; input != 0; i++) {
+		if ((input % target_num_sys) < 10) {
+			output[i] = input % target_num_sys + 48; // ASCII Werte fuer rest<10
+		} else {
+			output[i] = input % target_num_sys + 55; // ASCII Werte fuer rest>9 (Buchstaben)
+		}
+
+		if (verbosemode == 1) {
+			printf("\ni: %i ----------- \tquotient:\t%llu\tremainder:\t%c", i, input, output[i]);
+		}
+
+		input = input / target_num_sys;
+	}
+	
+	output[i] = '\0';
+	if (verbosemode == 1) {
+		putchar('\n');
+	}
+
+	do {
+		i--;
+		putchar(output[i]);
+	} while (i >= 0);
+}
+
+void print_help (void) {
+	printf("Usage: numc -i input-number -s input number system -t target-number-system [-v]\n");
 }
