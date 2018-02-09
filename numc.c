@@ -73,7 +73,6 @@ int main(int argc, char *argv[])
 		endzahl2 = other_to_decimal(input, source_num_sys, verbosemode);
 		// Ausgabe 
 		if (verbosemode == 1) printf("\n%s(%d) in decimal is: ", input, source_num_sys);
-		if (target_num_sys == 10) printf("%llu",endzahl2);
 		else if (verbosemode == 1) printf("%llu\n",endzahl2);
 	}
 	if (target_num_sys != 10) {
@@ -83,6 +82,8 @@ int main(int argc, char *argv[])
 		} else {
 			decimal_to_other(atol(input), target_num_sys, verbosemode);
 		}
+	} else {
+		printf("%llu",endzahl2);
 	}
 	// Programmende
 	putchar('\n');
