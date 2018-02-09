@@ -21,8 +21,8 @@ int main(int argc, char *argv[])
 
 	// Using getopt
 	int option = 0;
-    while ((option = getopt(argc, argv, "i:s:t:hv")) != -1)
-    {
+	int index;
+    while ((option = getopt(argc, argv, "i:s:t:hv")) != -1) {
         switch (option)
         {
         case 'i':
@@ -55,8 +55,13 @@ int main(int argc, char *argv[])
         }
 	}
 
-	for (int iterate_through_string = 0; iterate_through_string != strlen(input); iterate_through_string++) {
-		if (input[iterate_through_string] > source_num_sys) {
+	for (index = optind; index < argc; index++) {
+		printf ("Non-option argument %s\n", argv[index]);
+	}
+
+	for (int iterate_through_string = 0; iterate_through_string < strlen(input); iterate_through_string++) {
+		int ia = input[iterate_through_string] - '0';
+		if (ia > source_num_sys) {
 			printf("%s is not a valid number in the %i-number system.\n", input, source_num_sys);
 			exit(-1);
 		}
@@ -71,8 +76,7 @@ int main(int argc, char *argv[])
 		if (target_num_sys == 10) printf("%llu",endzahl2);
 		else if (verbosemode == 1) printf("%llu\n",endzahl2);
 	}
-	if (target_num_sys != 10)
-	{
+	if (target_num_sys != 10) {
 		// Berechnung Dezimal zu anderen Zahlensystemen	(Routine 2)
 		if (source_num_sys != 10) {
 			decimal_to_other(endzahl2, target_num_sys, verbosemode);
