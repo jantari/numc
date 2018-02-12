@@ -25,12 +25,6 @@ int main(int argc, char *argv[])
     while ((option = getopt(argc, argv, "i:s:t:hv")) != -1) {
         switch (option)
         {
-        case 'i':
-            if(!strcpy(input, optarg)) {
-                printf("Wrong command line argument: %s\n", optarg);
-                exit(-1);
-            }
-            break;
         case 's':
             if(!(source_num_sys = atoi(optarg))) {
                 printf("Wrong command line argument: %s\n", optarg);
@@ -56,12 +50,21 @@ int main(int argc, char *argv[])
 	}
 
 	for (index = optind; index < argc; index++) {
-		printf ("Non-option argument %s\n", argv[index]);
+		if(!strcpy(input, argv[index])) {
+			printf("Wrong command line argument: %s\n", optarg);
+		} else {
+			break;
+		}
 	}
 
 	for (int iterate_through_string = 0; iterate_through_string < strlen(input); iterate_through_string++) {
-		int ia = input[iterate_through_string] - '0';
-		if (ia > source_num_sys) {
+		int ia = 123;
+		if (input[iterate_through_string] > '9') {
+			ia = input[iterate_through_string] - '7';
+		} else {
+			ia = input[iterate_through_string] - '0';
+		}
+		if (ia >= source_num_sys) {
 			printf("%s is not a valid number in the %i-number system.\n", input, source_num_sys);
 			exit(-1);
 		}
@@ -143,5 +146,5 @@ void decimal_to_other (unsigned long long int input, unsigned int target_num_sys
 }
 
 void print_help (void) {
-	printf("Usage: numc -i input-number -s input number system -t target-number-system [-v]\n");
+	printf("Usage: numc (input number) -s (input number system) -t (target-number-system) [-v]\n");
 }
