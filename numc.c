@@ -12,6 +12,10 @@ void print_help (void);
 
 int main(int argc, char *argv[])
 {
+	if (argc < 2) {
+		print_help();
+		exit(0);
+	}
 	// Variablendeklaration
 	int target_num_sys = 0, source_num_sys = 0;
 	char endzahl[60];
@@ -22,30 +26,29 @@ int main(int argc, char *argv[])
 	// Using getopt
 	int option = 0;
 	int index;
-    while ((option = getopt(argc, argv, "i:s:t:hv")) != -1) {
-        switch (option)
-        {
-        case 's':
-            if(!(source_num_sys = atoi(optarg))) {
-                printf("Wrong command line argument: %s\n", optarg);
-                exit(-1);
-            }
-            break;
-        case 't':
-            if(!(target_num_sys = atoi(optarg))) {
-                printf("Wrong command line argument: %s\n", optarg);
-                exit(-1);
-            }
-            break;
-        case 'h':
-            print_help();
-            exit(0);
-            break;
-        case 'v':
-            verbosemode = 1;
-            break;
-        default:
-            break;
+	while ((option = getopt(argc, argv, "i:s:t:hv")) != -1) {
+        switch (option) {
+			case 's':
+				if(!(source_num_sys = atoi(optarg))) {
+					printf("Wrong command line argument: %s\n", optarg);
+					exit(-1);
+				}
+				break;
+			case 't':
+				if(!(target_num_sys = atoi(optarg))) {
+					printf("Wrong command line argument: %s\n", optarg);
+					exit(-1);
+				}
+				break;
+			case 'h':
+				print_help();
+				exit(0);
+				break;
+			case 'v':
+				verbosemode = 1;
+				break;
+			default:
+				break;
         }
 	}
 
@@ -53,6 +56,7 @@ int main(int argc, char *argv[])
 		if(!strcpy(input, argv[index])) {
 			printf("Wrong command line argument: %s\n", optarg);
 		} else {
+			/* Stop processing further arguments after first success */
 			break;
 		}
 	}
@@ -119,29 +123,24 @@ unsigned long long int other_to_decimal (char input[], int source_num_sys, _Bool
 void decimal_to_other (unsigned long long int input, unsigned int target_num_sys, _Bool verbosemode) {
 	char output[60];
     int i = 0;
+	static char numberArray[] = "0123456789abcdefghijklmnopqrstuvwxyz";
 
 	for (; input != 0; i++) {
-		if ((input % target_num_sys) < 10) {
-			output[i] = input % target_num_sys + 48; // ASCII Werte fuer rest<10
-		} else {
-			output[i] = input % target_num_sys + 55; // ASCII Werte fuer rest>9 (Buchstaben)
-		}
+		output[i] = numberArray[input % target_num_sys];
 
 		if (verbosemode == 1) {
 			printf("\ni: %i ----------- \tquotient:\t%llu\tremainder:\t%c", i, input, output[i]);
 		}
 
-		input = input / target_num_sys;
+		input /= target_num_sys;
 	}
 	
-	output[i] = '\0';
 	if (verbosemode == 1) {
 		putchar('\n');
 	}
 
 	do {
-		i--;
-		putchar(output[i]);
+		putchar(output[--i]);
 	} while (i >= 0);
 }
 
