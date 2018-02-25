@@ -18,7 +18,6 @@ int main(int argc, char *argv[])
 	}
 	// Variablendeklaration
 	int target_num_sys = 0, source_num_sys = 0;
-	char input[60];
 	_Bool verbosemode = 0;
 	unsigned long long int endzahl2 = 0;
 
@@ -51,8 +50,10 @@ int main(int argc, char *argv[])
         }
 	}
 
+	char *input;
 	for (index = optind; index < argc; index++) {
 		if (argv[optind]) {
+			input = malloc(strlen(argv[index]) * sizeof(char) + 1);
 			strcpy(input, argv[index]);
 		} else {
 			printf("Please specify a number to convert.");
@@ -125,7 +126,7 @@ void decimal_to_other (unsigned long long int input, unsigned int target_num_sys
 	if (verbosemode == 1) {
 		printf("Allocated memory for %f + 2 chars.\n", (log(input) / log(target_num_sys) ) * sizeof(char));
 	}
-	//char output[60];
+
     int i = 0;
 	static char numberArray[] = "0123456789abcdefghijklmnopqrstuvwxyz";
 
