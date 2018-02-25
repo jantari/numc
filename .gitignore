@@ -1,4 +1,4 @@
 .gitignore
 numc
 numc.exe
-beispiel_itoa.c
+beispiel_*
