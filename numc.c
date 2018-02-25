@@ -18,7 +18,6 @@ int main(int argc, char *argv[])
 	}
 	// Variablendeklaration
 	int target_num_sys = 0, source_num_sys = 0;
-	char endzahl[60];
 	char input[60];
 	_Bool verbosemode = 0;
 	unsigned long long int endzahl2 = 0;
@@ -53,16 +52,16 @@ int main(int argc, char *argv[])
 	}
 
 	for (index = optind; index < argc; index++) {
-		if(!strcpy(input, argv[index])) {
-			printf("Wrong command line argument: %s\n", optarg);
+		if (argv[optind]) {
+			strcpy(input, argv[index]);
 		} else {
-			/* Stop processing further arguments after first success */
-			break;
+			printf("Please specify a number to convert.");
+			exit(-1);
 		}
 	}
 
 	for (int iterate_through_string = 0; iterate_through_string < strlen(input); iterate_through_string++) {
-		int ia = 123;
+		int ia = 0;
 		if (input[iterate_through_string] > '9') {
 			ia = input[iterate_through_string] - '7';
 		} else {
@@ -121,7 +120,12 @@ unsigned long long int other_to_decimal (char input[], int source_num_sys, _Bool
 }
 
 void decimal_to_other (unsigned long long int input, unsigned int target_num_sys, _Bool verbosemode) {
-	char output[60];
+	// Allocate memory for a string with enough characters to hold the result of the calculation
+	char *output = malloc((int)(log(input) / log(target_num_sys) + 2) * sizeof(char));
+	if (verbosemode == 1) {
+		printf("Allocated memory for %f + 2 chars.\n", (log(input) / log(target_num_sys) ) * sizeof(char));
+	}
+	//char output[60];
     int i = 0;
 	static char numberArray[] = "0123456789abcdefghijklmnopqrstuvwxyz";
 
@@ -134,6 +138,7 @@ void decimal_to_other (unsigned long long int input, unsigned int target_num_sys
 
 		input /= target_num_sys;
 	}
+	output[i] = '\0';
 	
 	if (verbosemode == 1) {
 		putchar('\n');
@@ -142,6 +147,8 @@ void decimal_to_other (unsigned long long int input, unsigned int target_num_sys
 	do {
 		putchar(output[--i]);
 	} while (i >= 0);
+
+	free(output);
 }
 
 void print_help (void) {
