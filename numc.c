@@ -18,7 +18,6 @@ int main(int argc, char *argv[])
 	}
 	// Variablendeklaration
 	int target_num_sys = 0, source_num_sys = 0;
-	char input[60];
 	_Bool verbosemode = 0;
 	unsigned long long int endzahl2 = 0;
 
@@ -51,8 +50,12 @@ int main(int argc, char *argv[])
         }
 	}
 
+	char *input;
+	int input_length = 0;
 	for (index = optind; index < argc; index++) {
 		if (argv[optind]) {
+			input_length = strlen(argv[index]);
+			input = malloc(input_length * sizeof(char) + 1);
 			strcpy(input, argv[index]);
 		} else {
 			printf("Please specify a number to convert.");
@@ -60,7 +63,7 @@ int main(int argc, char *argv[])
 		}
 	}
 
-	for (int iterate_through_string = 0; iterate_through_string < strlen(input); iterate_through_string++) {
+	for (int iterate_through_string = 0; iterate_through_string < input_length; iterate_through_string++) {
 		int ia = 0;
 		if (input[iterate_through_string] > '9') {
 			ia = input[iterate_through_string] - '7';
@@ -76,7 +79,7 @@ int main(int argc, char *argv[])
 	// Hauptprogramm
 	if (source_num_sys != 10) {
 		// Berechnung andere Zahlensysteme zu Dezimal (Routine 1)
-		endzahl2 = other_to_decimal(input, source_num_sys, verbosemode);
+		endzahl2 = other_to_decimal(input, input_length, source_num_sys, verbosemode);
 		// Ausgabe 
 		if (verbosemode == 1) printf("\n%s(%d) in decimal is: ", input, source_num_sys);
 		else if (verbosemode == 1) printf("%llu\n",endzahl2);
@@ -97,20 +100,20 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-unsigned long long int other_to_decimal (char input[], int source_num_sys, _Bool verbosemode) {
+unsigned long long int other_to_decimal (char input[], int input_length, int source_num_sys, _Bool verbosemode) {
 	unsigned long long int divergebnis = 1, endzahl2 = 0;
 
-	for (int position = 0; position != strlen(input); position++) {
+	for (int position = 0; position != input_length; position++) {
 		if (input[position] != 48)
 		{
 			if (input[position] > 57) divergebnis = input[position] - 55;
 			else if (input[position] < 58) divergebnis = input[position] - 48;
 
-			endzahl2 += divergebnis * pow(source_num_sys, strlen(input) - position - 1);	
+			endzahl2 += divergebnis * pow(source_num_sys, input_length - position - 1);	
 		}
 		if (verbosemode == 1)
 		{
-			printf("\n%d ^ %lu: %i", source_num_sys, strlen(input) - position - 1, (int)pow(source_num_sys, strlen(input) - position - 1));
+			printf("\n%d ^ %lu: %i", source_num_sys, input_length - position - 1, (int)pow(source_num_sys, input_length - position - 1));
 			printf("\nPosition: %i --- Value: %c", position, input[position]);
 			printf("\n>> Result so far: %llu\n",endzahl2);
 		}
@@ -125,7 +128,7 @@ void decimal_to_other (unsigned long long int input, unsigned int target_num_sys
 	if (verbosemode == 1) {
 		printf("Allocated memory for %f + 2 chars.\n", (log(input) / log(target_num_sys) ) * sizeof(char));
 	}
-	//char output[60];
+
     int i = 0;
 	static char numberArray[] = "0123456789abcdefghijklmnopqrstuvwxyz";
 
