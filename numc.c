@@ -10,8 +10,7 @@ unsigned long long int other_to_decimal (char input[], int input_length, int sou
 void decimal_to_other (unsigned long long int input, unsigned int target_num_sys, _Bool verbosemode);
 void print_help (void);
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
 	if (argc < 2) {
 		print_help();
 		exit(0);
