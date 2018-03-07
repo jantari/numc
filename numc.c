@@ -8,10 +8,11 @@
 
 unsigned long long int other_to_decimal (char input[], int input_length, int source_num_sys, _Bool verbosemode);
 void decimal_to_other (unsigned long long int input, unsigned int target_num_sys, _Bool verbosemode);
+_Bool string_is_zeroes(char* string, unsigned int string_length);
 void print_help (void);
 
 int main(int argc, char *argv[]) {
-	if (argc < 2) {
+	if (argc < 4) {
 		print_help();
 		exit(0);
 	}
@@ -49,7 +50,7 @@ int main(int argc, char *argv[]) {
 	}
 
 	char *input;
-	int input_length = 0;
+	unsigned int input_length = 0;
 
 	for (int index = optind; index < argc; index++) {
 		if (argv[optind]) {
@@ -62,6 +63,17 @@ int main(int argc, char *argv[]) {
 		}
 	}
 
+	// Checking if input was 0
+	if (string_is_zeroes(input, input_length)) {
+		if (verbosemode == 1) {
+			printf("Nothing to convert.\n");
+		}
+		putchar('0');
+		putchar('\n');
+		return 0;
+	}
+
+	// Checking if input number is valid in specified number system
 	for (unsigned int iterate = 0, currentValue = 0; iterate < input_length; iterate++) {
 		if (input[iterate] > '9') {
 			currentValue = input[iterate] - '7';
@@ -89,6 +101,7 @@ int main(int argc, char *argv[]) {
 	} else {
 		printf("%llu", decimalNum);
 	}
+
 	// Programmende
 	free(input);
 	if (verbosemode == 1) putchar('\n');
@@ -145,6 +158,17 @@ void decimal_to_other (unsigned long long int input, unsigned int target_num_sys
 	} while (i >= 0);
 
 	free(output);
+}
+
+_Bool string_is_zeroes(char* string, unsigned int string_length) {
+	if (string_length != 0 && *string != '\0') {
+		for (int i = 0; i < string_length; i++) {
+			if (string[i] != '0') {
+				return 0;
+			}
+		}
+	}
+	return 1;
 }
 
 void print_help (void) {
